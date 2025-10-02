@@ -7,8 +7,11 @@ on:
 
 jobs:
   release:
-    name: package with maven
+    name: Package with Maven
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
     steps:
       # Checkout repository
       - name: Checkout code
@@ -49,3 +52,19 @@ jobs:
       - name: Deploy to Github Package feed
         run: |
           mvn clean deploy -U -X --file RedmayneEDI.Formats.Fortras100/pom.xml -DrepositoryId=github
+    
+      # Retrieve the ID for the latest release
+      - name: Get latest release
+        id: latestrelease
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: ${{ github.repository }}
+
+      # Uplodate to the release
+      - name: Upload release assets
+        uses: AButler/upload-release-assets@v3.0
+        with:
+          files: "./RedmayneEDI.Formats.Fortras100/target/*"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-id: ${{ steps.latestrelease.outputs.id }}
+      
