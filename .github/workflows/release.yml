@@ -1,0 +1,51 @@
+name: release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  release:
+    name: package with maven
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      # Compile Java files
+      - name: Build with Maven
+        run: mvn -B package --file ./RedmayneEDI.Formats.Fortras100/pom.xml
+
+      # Upload JAR as build artifact
+      - name: Upload JAR
+        uses: actions/upload-artifact@v3
+        with:
+          name: RedmayneEDI.Formats.Fortras100.Latest
+          path: ./RedmayneEDI.Formats.Fortras100/target/*.jar
+          overwrite: true
+    
+      # Apply Maven Settings
+      - name: Create Maven settings
+        env:
+          MAVEN_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }} 
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml <<EOF
+           <settings>
+            <servers>
+              <server>
+                <id>github</id>
+                <username>${{ secrets.GITHUB_USERNAME }}</username>
+                <password>${{ secrets.GITHUB_TOKEN }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      # Deploy JAR file
+      - name: Deploy to Github Package feed
+        run: |
+          mvn clean deploy -U -X --file RedmayneEDI.Formats.Fortras100/pom.xml -DrepositoryId=github

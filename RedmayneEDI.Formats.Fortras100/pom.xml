@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>redmayneedi</groupId>
+    <groupId>RedmayneEDI</groupId>
     <artifactId>RedmayneEDI.Formats.Fortras100</artifactId>
     <version>1.0.0</version>
 	<packaging>jar</packaging>
@@ -44,19 +44,28 @@
     </dependencies>
 
     <repositories>
-        <repository>
-            <id>gitea</id>
-            <url>http://192.168.0.10:3000/api/packages/david/maven</url>
-        </repository>
+		<repository>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/RedmayneEDI/redmayne-java-fortras</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
     </repositories>
     <distributionManagement>
         <repository>
-            <id>gitea</id>
-            <url>http://192.168.0.10:3000/api/packages/david/maven</url>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/RedmayneEDI/redmayne-java-fortras</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
         </repository>
         <snapshotRepository>
-            <id>gitea</id>
-            <url>http://192.168.0.10:3000/api/packages/david/maven</url>
+			<id>github</id>
+			<url>https://maven.pkg.github.com/RedmayneEDI/redmayne-java-fortras</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
         </snapshotRepository>
     </distributionManagement>
 
